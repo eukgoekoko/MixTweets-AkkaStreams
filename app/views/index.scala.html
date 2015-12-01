@@ -11,7 +11,7 @@
   }    
     
   <script type="text/javascript" charset="utf-8">
-    var feed = new EventSource("@routes.Application.stream(query.mkString(","))");
+    var feed = new EventSource("@routes.MainController.stream(query.mkString(","))");
       feed.addEventListener('message', function(event) {
         var result  = jQuery.parseJSON(event.data);
         console.log(result);
