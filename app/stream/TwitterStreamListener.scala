@@ -24,27 +24,18 @@ class TwitterStreamListener(searchQuery: String, config: Configuration) {
 
   def listenAndStream = {
 
-    val (actorRef, publisher) =  Source.actorRef[TweetInfo](1000, OverflowStrategy.fail).toMat(Sink.publisher)(Keep.both).run()
+    val (actorRef, publisher) = Source.actorRef[TweetInfo](1000, OverflowStrategy.fail).toMat(Sink.publisher)(Keep.both).run()
 
     Logger.info(s"#start listener for $searchQuery")
 
-    val statusListener = new StatusListener() {
+    val statusListener = new StatusAdapter() {
 
       override def onStatus(status: TwitterStatus) = {
        Logger.debug(status.getText)
-       //push elements into a publisher
        actorRef ! TweetInfo(searchQuery, status.getText, status.getUser.getName)
       }
 
-      override def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) = {}
-
-      override def onTrackLimitationNotice(numberOfLimitedStatuses: Int) = {}
-
       override def onException(ex: Exception) = ex.printStackTrace()
-
-      override def onScrubGeo(userId: Long, upToStatusId: Long) = {}
-
-      override def onStallWarning(warning: StallWarning) = {}
 
     }
 
