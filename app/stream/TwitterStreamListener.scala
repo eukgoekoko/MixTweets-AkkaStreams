@@ -14,7 +14,7 @@ object TwitterStreamListener {
   implicit val system = ActorSystem("mixedTweets")
   implicit val materializer = ActorFlowMaterializer()
 
-  val searchQuery = "java"
+  val searchQuery = Array("java")
 
   val cb = new ConfigurationBuilder()
 
@@ -26,19 +26,18 @@ object TwitterStreamListener {
 
   val config = cb.build
 
-  val query = new FilterQuery(0, Array[Long](), Array(searchQuery))
+  val query = new FilterQuery(0, Array[Long](), searchQuery)
 
   val twitterStream = new TwitterStreamFactory(config).getInstance
 
   def listenAndStream = {
     val (actorRef, publisher) = Source.actorRef[TweetInfo](1000, OverflowStrategy.fail).toMat(Sink.publisher)(Keep.both).run()
-    Logger.info(s"Start listener for $searchQuery")
 
     val statusListener = new StatusAdapter() {
 
       override def onStatus(status: TwitterStatus) = {
        Logger.debug(status.getText)
-       actorRef ! TweetInfo(searchQuery, status.getText, status.getUser.getName)
+       actorRef ! TweetInfo(status.getText, status.getUser.getName)
       }
 
       override def onException(ex: Exception) = ex.printStackTrace()

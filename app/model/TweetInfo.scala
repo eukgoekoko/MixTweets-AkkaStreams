@@ -1,5 +1,4 @@
 package model
 
-case class TweetInfo(searchQuery: String,
-                     message: String,
+case class TweetInfo(message: String,
                      author: String)

@@ -25,11 +25,9 @@ object MainController extends Controller {
     implicit val system = ActorSystem("mixedTweets")
     implicit val materializer = ActorFlowMaterializer()
 
-    val toJson = (tweet: TweetInfo) => Json.obj("message" -> s"${tweet.searchQuery} : ${tweet.message}", "author" -> s"${tweet.author}")
+    val toJson = (tweet: TweetInfo) => Json.obj("message" -> s"${tweet.message}", "author" -> s"${tweet.author}")
 
-//    val streams = Seq(TwitterStreamListener.listenAndStream)
-
-    val streams = Seq(Source.single(TweetInfo("Hey", "Ho", "Let's go")))
+    val streams = Seq(TwitterStreamListener.listenAndStream)
 
     val mergedStream = Source[TweetInfo]() { implicit builder =>
       import FlowGraph.Implicits._
