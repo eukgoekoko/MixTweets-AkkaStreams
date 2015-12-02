@@ -3,9 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /				            controllers.MainController.index
-GET     /liveTweets         		controllers.MainController.liveTweets(query: List[String])
-GET     /stream					    controllers.MainController.stream(query: String)
+GET     /				            controllers.MainController.index()
+GET     /stream					    controllers.MainController.stream()
 
 
 # Map static resources from the /public folder to the /assets URL path
