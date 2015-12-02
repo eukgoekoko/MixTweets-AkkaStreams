@@ -9,9 +9,9 @@
           if (msg.indexOf('java') > -1) {
             $('<li class="list-group-item">' + result.message + '</li>').hide().appendTo('#java-list').slideDown();
           } else if (msg.indexOf('scala') > -1) {
-            $('<li class="list-group-item">' + 'rules' + '</li>').hide().appendTo('#scala-list').slideDown();
+            $('<li class="list-group-item">' + result.message + '</li>').hide().appendTo('#scala-list').slideDown();
           } else if (msg.indexOf('haskell') > -1) {
-            $('<li class="list-group-item">' + 'in decline' + '</li>').hide().appendTo('#haskell-list').slideDown();
+            $('<li class="list-group-item">' + result.message + '</li>').hide().appendTo('#haskell-list').slideDown();
           }
         }, false);
   </script>
