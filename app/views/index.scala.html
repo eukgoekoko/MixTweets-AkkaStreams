@@ -9,7 +9,7 @@
       feed.addEventListener('message', function(event) {
         var result  = jQuery.parseJSON(event.data);
         console.log(result);
-        $('#message-java').html(result.message + " -" + result.author)
+        $('#message-java').html(result.message + " - " + result.author)
       }, false);
   </script>
 }

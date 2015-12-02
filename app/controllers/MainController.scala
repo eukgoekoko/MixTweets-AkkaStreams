@@ -27,7 +27,9 @@ object MainController extends Controller {
 
     val toJson = (tweet: TweetInfo) => Json.obj("message" -> s"${tweet.searchQuery} : ${tweet.message}", "author" -> s"${tweet.author}")
 
-    val streams = Seq(TwitterStreamListener.listenAndStream)
+//    val streams = Seq(TwitterStreamListener.listenAndStream)
+
+    val streams = Seq(Source.single(TweetInfo("Hey", "Ho", "Let's go")))
 
     val mergedStream = Source[TweetInfo]() { implicit builder =>
       import FlowGraph.Implicits._
