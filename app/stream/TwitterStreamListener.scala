@@ -14,7 +14,7 @@ object TwitterStreamListener {
   implicit val system = ActorSystem("mixedTweets")
   implicit val materializer = ActorFlowMaterializer()
 
-  val searchQuery = Array("java")
+  val searchQuery = Array("java", "scala", "haskell")
 
   val cb = new ConfigurationBuilder()
 

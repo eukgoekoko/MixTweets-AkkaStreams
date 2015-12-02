@@ -5,11 +5,12 @@
           var result  = jQuery.parseJSON(event.data);
           console.log(result);
 
-          if (result.message.toLowerCase().indexOf('java'.toLowerCase()) === 0) {
+          var msg = result.message.toLowerCase();
+          if (msg.indexOf('java') > -1) {
             $('<li class="list-group-item">' + result.message + '</li>').hide().appendTo('#java-list').slideDown();
-          } else if (result.message.toLowerCase().indexOf('scala'.toLowerCase()) === 0) {
+          } else if (msg.indexOf('scala') > -1) {
             $('<li class="list-group-item">' + 'rules' + '</li>').hide().appendTo('#scala-list').slideDown();
-          } else if (result.message.toLowerCase().indexOf('haskell'.toLowerCase()) === 0) {
+          } else if (msg.indexOf('haskell') > -1) {
             $('<li class="list-group-item">' + 'in decline' + '</li>').hide().appendTo('#haskell-list').slideDown();
           }
         }, false);
