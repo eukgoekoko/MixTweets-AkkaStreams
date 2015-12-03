@@ -3,6 +3,7 @@ package stream
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.{ActorFlowMaterializer, OverflowStrategy}
+import com.typesafe.config.ConfigFactory
 import model.TweetInfo
 import play.api.Logger
 import twitter4j.conf.ConfigurationBuilder
@@ -14,21 +15,21 @@ object TwitterStreamListener {
   implicit val system = ActorSystem("mixedTweets")
   implicit val materializer = ActorFlowMaterializer()
 
+  val config = ConfigFactory.load()
+
   val searchQuery = Array("java", "scala", "haskell")
 
   val cb = new ConfigurationBuilder()
 
   cb.setDebugEnabled(true)
-    .setOAuthConsumerKey("jTWONyepVvv3M38h0xH2f04N2")
-    .setOAuthConsumerSecret("T6YjxKBiWSgFEgYnMfhOsE5UWUJps4VfHXn7GOroA4FcVCZldU")
-    .setOAuthAccessToken("597266731-z8p4D6SVyg5v5v2wQKbfXONPjRHxKn1FxVXe5UzF")
-    .setOAuthAccessTokenSecret("51HnIBEWfZ7gLLXmNNwwIRjIp6NARI5XW1sbMDAyKVc")
-
-  val config = cb.build
+    .setOAuthConsumerKey(config.getString("twitter-oauth.consumer-key"))
+    .setOAuthConsumerSecret(config.getString("twitter-oauth.consumer-secret"))
+    .setOAuthAccessToken(config.getString("twitter-oauth.access-token"))
+    .setOAuthAccessTokenSecret(config.getString("twitter-oauth.access-token-secret"))
 
   val query = new FilterQuery(0, Array[Long](), searchQuery)
 
-  val twitterStream = new TwitterStreamFactory(config).getInstance
+  val twitterStream = new TwitterStreamFactory(cb.build).getInstance
 
   def listenAndStream = {
     val (actorRef, publisher) = Source.actorRef[TweetInfo](1000, OverflowStrategy.fail).toMat(Sink.publisher)(Keep.both).run()
